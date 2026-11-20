@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra cứu điểm Sổ liên lạc điện tử vnEdu</title>
+    <!-- Sử dụng font Roboto chuẩn của các hệ thống web hiện đại -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        
+        /* Header chuẩn vnEdu */
+        .header {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 10;
+        }
+        .header-top {
+            max-width: 1140px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+        }
+        .logo-box {
+            display: flex;
+            align-items: center;
+        }
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: #00a651;
+            letter-spacing: -0.5px;
+        }
+        .logo-text span {
+            color: #0056b3;
+        }
+        .hotline {
+            font-size: 14px;
+            color: #555;
+        }
+        .hotline strong {
+            color: #d9534f;
+            font-size: 16px;
+        }
+
+        /* Thanh điều hướng */
+        .navbar {
+            background-color: #00a651;
+            border-top: 1px solid #009347;
+        }
+        .nav-container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .navbar a {
+            display: inline-block;
+            color: #fff;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        .navbar a.active, .navbar a:hover {
+            background-color: #008943;
+        }
+
+        /* Phần nội dung chính */
+        .main-content {
+            max-width: 1140px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #00a651;
+            text-transform: uppercase;
+        }
+        
+        /* Box thông tin học sinh */
+        .student-info {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 14px;
+            border-bottom: 2px dashed #eee;
+        }
+        .info-row {
+            display: flex;
+        }
+        .info-label {
+            width: 130px;
+            color: #666;
+            font-weight: 500;
+        }
+        .info-value {
+            font-weight: 700;
+            color: #333;
+        }
+
+        /* Bảng điểm */
+        .table-container {
+            padding: 20px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #f4f6f8;
+            color: #495057;
+            font-weight: 600;
+        }
+        .subject-name {
+            text-align: left;
+            font-weight: 500;
+            color: #0056b3;
+        }
+        
+        .dtbm {
+            font-weight: 700;
+            color: #d9534f;
+            background-color: #fdf5f5;
+        }
+
+        /* CSS Tàng hình cho ContentEditable - Cực kỳ quan trọng để không bị lộ */
+        [contenteditable="true"] {
+            outline: none;
+            padding: 3px 5px;
+            border-radius: 3px;
+            border: 1px solid transparent; /* Viền trong suốt mặc định */
+            transition: all 0.2s ease;
+            min-width: 20px;
+            display: inline-block;
+        }
+        /* Chỉ hiện khung mờ khi rê chuột vào */
+        [contenteditable="true"]:hover {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            cursor: text;
+        }
+        /* Đổi màu nền khi đang gõ chữ */
+        [contenteditable="true"]:focus {
+            background-color: #fff3cd;
+            border: 1px dashed #ffc107;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 13px;
+            color: #777;
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        .footer p { margin: 5px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-top">
+            <div class="logo-box">
+                <div class="logo-text"><span>vn</span>Edu</div>
+            </div>
+            <div class="hotline">
+                Tổng đài hỗ trợ: <strong>1800 1260</strong>
+            </div>
+        </div>
+        <div class="navbar">
+            <div class="nav-container">
+                <a href="#" class="active">Tra cứu kết quả học tập</a>
+                <a href="#">Thông tin điểm danh</a>
+                <a href="#">Lịch học</a>
+                <a href="#">Thanh toán học phí</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="card">
+            <div class="card-header">
+                Thông tin hồ sơ học sinh
+            </div>
+            <div class="student-info">
+                <div class="info-row">
+                    <div class="info-label">Họ và tên:</div>
+                    <div class="info-value"><span contenteditable="true">Lê Nhật Long</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Mã học sinh:</div>
+                    <div class="info-value"><span contenteditable="true">260847291</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Lớp học:</div>
+                    <div class="info-value"><span contenteditable="true">8A</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Trường học:</div>
+                    <div class="info-value"><span contenteditable="true">THCS Lệ Sơn</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Năm học:</div>
+                    <div class="info-value"><span contenteditable="true">2026 - 2027</span></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Học kì:</div>
+                    <div class="info-value"><span contenteditable="true">Học kì I</span></div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="width: 40px;">STT</th>
+                            <th rowspan="2" style="width: 200px;">Môn học</th>
+                            <th colspan="4">Đánh giá Thường xuyên (ĐGtx)</th>
+                            <th rowspan="2" style="width: 80px;">ĐG Giữa kì (ĐGgk)</th>
+                            <th rowspan="2" style="width: 80px;">ĐG Cuối kì (ĐGck)</th>
+                            <th rowspan="2" style="width: 70px;">ĐTBm</th>
+                        </tr>
+                        <tr>
+                            <th style="width: 50px;">1</th>
+                            <th style="width: 50px;">2</th>
+                            <th style="width: 50px;">3</th>
+                            <th style="width: 50px;">4</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="subject-name">Toán</td>
+                            <td><span contenteditable="true">9.0</span></td>
+                            <td><span contenteditable="true">8.5</span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td><span contenteditable="true">9.0</span></td>
+                            <td class="dtbm"><span contenteditable="true">9.2</span></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="subject-name">Ngữ văn 8</td>
+                            <td><span contenteditable="true">8.0</span></td>
+                            <td><span contenteditable="true">8.5</span></td>
+                            <td><span contenteditable="true">9.0</span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true">8.5</span></td>
+                            <td><span contenteditable="true">9.0</span></td>
+                            <td class="dtbm"><span contenteditable="true">8.8</span></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="subject-name">Khoa học tự nhiên</td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td><span contenteditable="true">10</span></td>
+                            <td><span contenteditable="true">9.0</span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td class="dtbm"><span contenteditable="true">9.5</span></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td class="subject-name">Tiếng Anh</td>
+                            <td><span contenteditable="true">10</span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td><span contenteditable="true">10</span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td><span contenteditable="true">10</span></td>
+                            <td class="dtbm"><span contenteditable="true">9.8</span></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td class="subject-name">Lịch sử và Địa lí</td>
+                            <td><span contenteditable="true">9.0</span></td>
+                            <td><span contenteditable="true">9.0</span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true">8.5</span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td class="dtbm"><span contenteditable="true">9.1</span></td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td class="subject-name">Công nghệ 8</td>
+                            <td><span contenteditable="true">10</span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true">10</span></td>
+                            <td><span contenteditable="true">10</span></td>
+                            <td class="dtbm"><span contenteditable="true">9.9</span></td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td class="subject-name">Giáo dục công dân</td>
+                            <td><span contenteditable="true">9.0</span></td>
+                            <td><span contenteditable="true">10</span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td class="dtbm"><span contenteditable="true">9.4</span></td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td class="subject-name">Tin học</td>
+                            <td><span contenteditable="true">10</span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true">10</span></td>
+                            <td><span contenteditable="true">9.5</span></td>
+                            <td class="dtbm"><span contenteditable="true">9.7</span></td>
+                        </tr>
+                        <!-- Các môn đánh giá bằng Nhận xét (Đ/CĐ) để tăng độ chân thật -->
+                        <tr>
+                            <td>9</td>
+                            <td class="subject-name">Giáo dục thể chất</td>
+                            <td><span contenteditable="true">Đ</span></td>
+                            <td><span contenteditable="true">Đ</span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true">Đ</span></td>
+                            <td><span contenteditable="true">Đ</span></td>
+                            <td class="dtbm" style="color: #00a651;"><span contenteditable="true">Đạt</span></td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td class="subject-name">Nghệ thuật</td>
+                            <td><span contenteditable="true">Đ</span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true"></span></td>
+                            <td><span contenteditable="true">Đ</span></td>
+                            <td><span contenteditable="true">Đ</span></td>
+                            <td class="dtbm" style="color: #00a651;"><span contenteditable="true">Đạt</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="padding: 10px 20px 20px 20px;">
+                <div style="background-color: #f1f8e9; border: 1px solid #c5e1a5; padding: 15px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-weight: 500;">
+                    <div>Đánh giá kết quả rèn luyện: <strong style="color: #00a651;" contenteditable="true">Tốt</strong></div>
+                    <div>Đánh giá kết quả học tập: <strong style="color: #00a651;" contenteditable="true">Tốt</strong></div>
+                    <div>Danh hiệu: <strong style="color: #d9534f;" contenteditable="true">Học sinh Xuất sắc</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 vnEdu - Tập đoàn Bưu chính Viễn thông Việt Nam VNPT.</p>
+        <p>Đây là hệ thống quản lý thông tin giáo dục chính thức.</p>
+    </div>
+
+</body>
+</html>
